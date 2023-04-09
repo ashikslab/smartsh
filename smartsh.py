@@ -7,7 +7,7 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 # argcmd contains the entire command line arguments as a space separated string
 argcmd = " ".join(sys.argv)
 
-prompt = "Suggest a linux shell command to accomplish the following. If the entered string is already a valid command, suggest installing the required packages: " + argcmd
+prompt = "Suggest a linux shell command to accomplish the following: " + argcmd
 completion = openai.ChatCompletion.create(
     model = 'gpt-3.5-turbo',
     messages = [
