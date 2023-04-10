@@ -42,7 +42,8 @@ else:
 completion = None
 apioutput = None
 if api_model == "text-davinci-003":
-    print("Using model " + api_model)
+    if smarsh_dont_warn != True:
+        print("Using model " + api_model)
     # Get the completion from OpenAI
     completion = openai.Completion.create(
         model="text-davinci-003",
