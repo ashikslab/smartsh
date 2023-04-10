@@ -10,7 +10,7 @@ if openai.api_key is None:
     sys.exit(1)
 
 api_model = os.environ.get("OPENAI_MODEL_ID")
-smarsh_dont_warn = os.environ.get("SMARTSH_DONT_WARN") == "1"
+smarsh_dont_warn = os.environ.get("SMARTSH_SILENT_MODE") == "1"
 if api_model is None:
     api_model = "gpt-3.5-turbo"
     if smarsh_dont_warn != True:
@@ -76,4 +76,4 @@ if is_in_teacher_mode == False and apioutput is not None:
     else:
         print("Command not executed")
 else:
-    print(apioutput) 
+    print(apioutput)
