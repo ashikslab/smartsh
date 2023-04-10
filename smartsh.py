@@ -10,14 +10,22 @@ if openai.api_key is None:
     sys.exit(1)
 
 api_model = os.environ.get("OPENAI_MODEL_ID")
-smarsh_dont_warn = os.environ.get("SMARTSH_DONT_WARN")
+smarsh_dont_warn = os.environ.get("SMARTSH_DONT_WARN") == "1"
 if api_model is None:
     api_model = "gpt-3.5-turbo"
-    if smarsh_dont_warn is None:
+    if smarsh_dont_warn != True:
         print("Warning: OPENAI_MODEL_ID not set. Supported models are text-davinci-003, gpt-3.5-turbo")
         print("Using default model " + api_model)
 
 smarsh_debug_mode = os.environ.get("SMARTSH_DEBUG")
+
+is_in_teacher_mode = False
+smartsh_teacher_mode = os.environ.get("SMARTSH_TEACHER_MODE")
+if smartsh_teacher_mode == "1" or smartsh_teacher_mode == "true":
+    if smarsh_dont_warn != True:
+        print("Teacher mode enabled")
+    is_in_teacher_mode = True
+
 
 if smarsh_debug_mode == "1" or smarsh_debug_mode == "true":
     print("Debug mode enabled")
@@ -26,10 +34,13 @@ if smarsh_debug_mode == "1" or smarsh_debug_mode == "true":
 
 # argcmd contains the entire command line arguments as a space separated string
 argcmd = " ".join(sys.argv)
-
-prompttxt = "You suggest a valid and correct {os.environ.get('SHELL')} command to accomplish the following, without any further explanation or additional text: " + argcmd
+prompttxt  = ""
+if is_in_teacher_mode:
+    prompttxt = "You suggest a valid shell command to accomplish the following, together with an explanation: " + argcmd
+else:
+    prompttxt = "You suggest a valid and correct {os.environ.get('SHELL')} command to accomplish the following, without any further explanation or additional text: " + argcmd
 completion = None
-shellcmd = None
+apioutput = None
 if api_model == "text-davinci-003":
     print("Using model " + api_model)
     # Get the completion from OpenAI
@@ -42,8 +53,7 @@ if api_model == "text-davinci-003":
         frequency_penalty=0,
         presence_penalty=0,
     )
-    # print the output from davinci model to stdout
-    shellcmd = completion['choices'][0]['text'].strip()
+    apioutput = completion['choices'][0]['text'].strip()
 elif api_model == "gpt-3.5-turbo":
     completion = openai.ChatCompletion.create(
     model = api_model,
@@ -53,15 +63,17 @@ elif api_model == "gpt-3.5-turbo":
     temperature = 0
     )
     # print the response to stdout
-    shellcmd = completion['choices'][0]['message']['content'].strip()
+    apioutput = completion['choices'][0]['message']['content'].strip()
 
 # Ask the user if the suggested command shall be executed
-if shellcmd is not None:
-    print("Suggested command: " + shellcmd)
+if is_in_teacher_mode == False and apioutput is not None:
+    print("Suggested command: " + apioutput)
     print("Do you want to execute this command? (y/n)")
     user_input = input()
     if user_input == 'y':
-        print("Executing command: " + shellcmd)
-        os.system(shellcmd)
+        print("Executing command: " + apioutput)
+        os.system(apioutput)
     else:
         print("Command not executed")
+else:
+    print(apioutput) 
