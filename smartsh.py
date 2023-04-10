@@ -38,7 +38,7 @@ prompttxt  = ""
 if is_in_teacher_mode:
     prompttxt = "You suggest a valid shell command to accomplish the following, together with an explanation: " + argcmd
 else:
-    prompttxt = "You suggest a valid and correct {os.environ.get('SHELL')} command to accomplish the following, without any further explanation or additional text: " + argcmd
+    prompttxt = "You suggest a valid and correct {os.environ.get('SHELL')} command to accomplish the following. You shal not provide any further explanation or additional text: " + argcmd
 completion = None
 apioutput = None
 if api_model == "text-davinci-003":
