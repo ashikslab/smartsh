@@ -1,4 +1,4 @@
-smartsh.py is a simple python script that I wrote which can take any string as argument and queries OpenAPI's API to tell you how to accomplish the given task using a shell command. Yes, chatgpt from command line (sort of).  But let me tell you a simple trick that you can use to supercharge your bash with it!
+smartsh.py is a simple python script that I wrote which can take a task description (any string) as argument and query OpenAPI's API to tell you how to accomplish the given task using a shell command. Yes, chatgpt from command line (sort of).  But let me tell you a simple trick that you can use to supercharge your bash with it!
 
 bash (I think starting from 4.0) conveniently provides a  handler for situations when a command that the user entered is invalid.
 
