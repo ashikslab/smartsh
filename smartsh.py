@@ -87,7 +87,10 @@ if is_in_teacher_mode == False and apioutput is not None:
         print("Executing command: " + apioutput)
         if colorize_output:
             print("\033[93m")
-        os.system(apioutput)
+        if tune_for_powershell:
+            os.system("powershell.exe -Command " + apioutput)
+        else:
+            os.system(apioutput)
         if colorize_output:
             print("\033[0m")
     else:
