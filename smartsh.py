@@ -18,7 +18,8 @@ if api_model is None:
         print("Using default model " + api_model)
 
 smarsh_debug_mode = os.environ.get("SMARTSH_DEBUG")
-
+tune_for_powershell = os.environ.get("SMARTSH_TUNE_FOR_POWERSHELL") == "1" or os.environ.get("SMARTSH_TUNE_FOR_POWERSHELL") == "true"
+colorize_output = os.environ.get("SMARTSH_COLORIZE_OUTPUT") == "1" or os.environ.get("SMARTSH_COLORIZE_OUTPUT") == "true"
 is_in_teacher_mode = False
 smartsh_teacher_mode = os.environ.get("SMARTSH_TEACHER_MODE")
 if smartsh_teacher_mode == "1" or smartsh_teacher_mode == "true":
@@ -36,9 +37,15 @@ if smarsh_debug_mode == "1" or smarsh_debug_mode == "true":
 argcmd = " ".join(sys.argv)
 prompttxt  = ""
 if is_in_teacher_mode:
-    prompttxt = "You suggest a valid shell command to accomplish the following, together with an explanation: " + argcmd
+    if tune_for_powershell:
+        prompttxt = "You suggest a valid PowerShell command to accomplish the following, together with an explanation: " + argcmd
+    else:
+        prompttxt = "You suggest a valid shell command to accomplish the following, together with an explanation: " + argcmd
 else:
-    prompttxt = "You suggest a valid and correct {os.environ.get('SHELL')} command to accomplish the following. You shall not provide any further explanation or additional text: " + argcmd
+    if tune_for_powershell:
+        prompttxt = "You suggest a valid and correct PowerShell command to accomplish the following. You shall not provide any further explanation or additional text: " + argcmd
+    else:
+        prompttxt = "You suggest a valid and correct {os.environ.get('SHELL')} command to accomplish the following. You shall not provide any further explanation or additional text: " + argcmd
 completion = None
 apioutput = None
 if api_model == "text-davinci-003":
@@ -68,12 +75,21 @@ elif api_model == "gpt-3.5-turbo":
 
 # Ask the user if the suggested command shall be executed
 if is_in_teacher_mode == False and apioutput is not None:
-    print("Suggested command: " + apioutput)
+    # print the suggested command in bright red
+    if colorize_output:
+        print("suggested command: \033[91m" + apioutput + "\033[0m")
+    else:
+        print("suggested command: " + apioutput)
+        
     print("Do you want to execute this command? (y/n)")
     user_input = input()
     if user_input == 'y':
         print("Executing command: " + apioutput)
+        if colorize_output:
+            print("\033[93m")
         os.system(apioutput)
+        if colorize_output:
+            print("\033[0m")
     else:
         print("Command not executed")
 else:
