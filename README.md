@@ -46,3 +46,7 @@ You can set the following additional environment variables which smartsh can mak
     If the variable is not set, we use "gpt-3.5-turbo" by default
 
 `SMARTSH_DEBUG` : Will print additional debug info when running smartsh
+
+`SMARTSH_SILENT_MODE` When set to 1, smartsh will try not to print warnings about missing environment variables, current mode etc. Off by default.
+
+`SMARTSH_TEACHER_MODE` When set to 1, smartsh will provide you an explanation about the command it synthesized. Note that this will disable the prompt to execute the synthesized command. Off by default.
