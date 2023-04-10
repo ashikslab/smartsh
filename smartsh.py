@@ -88,6 +88,8 @@ if is_in_teacher_mode == False and apioutput is not None:
         if colorize_output:
             print("\033[93m")
         if tune_for_powershell:
+            print("***** PowerShell support is experimental*****")
+            print("***** You may have better luck if you copy the command and paste it into a PowerShell window *****")
             os.system("powershell.exe -Command " + apioutput)
         else:
             os.system(apioutput)
