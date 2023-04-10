@@ -37,3 +37,9 @@ pkill -f "chrome.*renderer"
 
 This command uses the `pkill` command to send a signal to all processes whose name matches the regular expression `chrome.*renderer`. This will effectively kill all Google Chrome renderer processes.
 ```
+
+You can set the following additional environment variables which smartsh can make use of:
+
+OPENAI_MODEL_ID: The model to use: Supported models are "text-davinci-003", "gpt-3.5-turbo"
+    If the variable is not set, we use "gpt-3.5-turbo" by default
+SMARTSH_DEBUG : Will print additional debug info when running smartsh
