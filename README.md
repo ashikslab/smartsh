@@ -4,7 +4,7 @@
 
 <h3>See it in action on asciinema!</h3>
 
-[![asciicast](https://asciinema.org/a/576670.png)](https://asciinema.org/a/576670)
+[![asciicast](https://asciinema.org/a/576695.png)](https://asciinema.org/a/576695)
 
 Yes, chatgpt from command line (sort of).  But let me tell you a simple trick that you can use to supercharge your bash with it!
 
